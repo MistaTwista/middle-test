@@ -22,6 +22,7 @@ class TestCalcPolishNotation < Test::Unit::TestCase
     assert_equal(14.0, calc_polish_notation("5 1 2 + 4 * + 3 -"))
     assert_equal(3, calc_polish_notation("3 4 2 * 1 5 - 2 3 ^ ^ / +"))
     assert_equal(25, calc_polish_notation("5 2 ^"))
+    assert_equal("Zero division: 5 / 0", calc_polish_notation("5 0 /"))
     assert_equal(0, calc_polish_notation(" "))
     assert_equal(0, calc_polish_notation(""))
   end

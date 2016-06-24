@@ -9,15 +9,20 @@ def calculation_sign(symbol)
   available_sign_symbols[symbol.to_sym]
 end
 
+def bad_symbols?(exp)
+  matcher = /[^ \+\-\*\/\^0-9]/.match(exp)
+  puts "Bad symbols detected" unless matcher.nil?
+  matcher.nil?
+end
+
 def valid_expression?(exp)
-  return false unless /[^ \+\-\*\/\^0-9]/.match(exp.strip).nil?
   if exp.is_a?(String)
+    return false unless bad_symbols?(exp.strip)
     return true unless exp.strip.empty?
   end
   false
 end
 
-# TODO: ZeroDivisionError handler
 def calc_polish_notation(exp)
   return 0 unless valid_expression? exp
   expression = exp.strip.split(" ")
@@ -25,7 +30,12 @@ def calc_polish_notation(exp)
     expression.each do |u|
       sign = calculation_sign(u)
       if sign
-        stack << stack.pop(2).map(&:to_i).reduce(&sign)
+        values = stack.pop(2)
+        begin
+          stack << values.map(&:to_i).reduce(&sign)
+        rescue ZeroDivisionError => e
+          return "Zero division: #{values.first} #{sign} #{values.last}"
+        end
       else
         stack << u
       end
