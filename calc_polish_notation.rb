@@ -17,6 +17,7 @@ def valid_expression?(exp)
   false
 end
 
+# TODO: ZeroDivisionError handler
 def calc_polish_notation(exp)
   return 0 unless valid_expression? exp
   expression = exp.strip.split(" ")
