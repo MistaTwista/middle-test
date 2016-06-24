@@ -1,33 +1,37 @@
 def calculation_sign(symbol)
   available_sign_symbols = {
-    "+": :+,
-    "-": :-,
-    "*": :*,
-    "/": :/,
-    "^": :**,
+    '+': :+,
+    '-': :-,
+    '*': :*,
+    '/': :/,
+    '^': :**,
   }
   available_sign_symbols[symbol.to_sym]
 end
 
 def bad_symbols?(exp)
-  matcher = /[^ \+\-\*\/\^0-9]/.match(exp)
-  puts "Bad symbols detected" unless matcher.nil?
+  matcher = /[^ \+\-\*\/\^0-9]/.match(exp.join(' '))
+  puts 'Bad symbols detected' unless matcher.nil?
   matcher.nil?
 end
 
 def valid_expression?(exp)
-  if exp.is_a?(String)
-    return false unless bad_symbols?(exp.strip)
-    return true unless exp.strip.empty?
-  end
+  return false unless bad_symbols?(exp)
+  return true if exp.any?
   false
 end
 
-def calc_polish_notation(exp)
+def prepare_expression(exp)
+  exp.flatten!
+  exp = exp[0].strip.split(" ") if exp.length == 1
+  exp
+end
+
+def calc_polish_notation(*exp)
+  exp = prepare_expression(exp)
   return 0 unless valid_expression? exp
-  expression = exp.strip.split(" ")
   [].tap do |stack|
-    expression.each do |u|
+    exp.each do |u|
       sign = calculation_sign(u)
       if sign
         values = stack.pop(2)
@@ -43,4 +47,4 @@ def calc_polish_notation(exp)
   end.last
 end
 
-puts calc_polish_notation(ARGV[0]) if ARGV[0]
+puts calc_polish_notation(ARGV) if ARGV

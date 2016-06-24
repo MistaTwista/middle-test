@@ -11,15 +11,16 @@ class TestCalcPolishNotation < Test::Unit::TestCase
   end
 
   def test_valid_expression
-    assert_equal(true, valid_expression?("5 1 2 + 4 * + 3 -"))
-    assert_equal(true, valid_expression?("  5 1 2 + 4 * + 3 -  "))
-    assert_equal(false, valid_expression?("3 4 2 * 1 5 − 2 3 ^ ^ / +"))
-    assert_equal(false, valid_expression?("  "))
-    assert_equal(false, valid_expression?(""))
+    assert_equal(true, valid_expression?(["5 1 2 + 4 * + 3 -"]))
+    assert_equal(true, valid_expression?(["5", "1", "2", "+", "4", "*", "+", "3", "-"]))
+    assert_equal(true, valid_expression?(["  5 1 2 + 4 * + 3 -  "]))
+    assert_equal(false, valid_expression?(["3 4 2 * 1 5 − 2 3 ^ ^ / +"]))
+    assert_equal(false, valid_expression?(["3 4 \\"]))
   end
 
   def test_calc_polish_notation
     assert_equal(14.0, calc_polish_notation("5 1 2 + 4 * + 3 -"))
+    assert_equal(14.0, calc_polish_notation("5", "1", "2", "+", "4", "*", "+", "3", "-"))
     assert_equal(3, calc_polish_notation("3 4 2 * 1 5 - 2 3 ^ ^ / +"))
     assert_equal(25, calc_polish_notation("5 2 ^"))
     assert_equal("Zero division: 5 / 0", calc_polish_notation("5 0 /"))
