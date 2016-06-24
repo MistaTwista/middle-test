@@ -7,10 +7,12 @@ class FileParser
     populate_options(args)
   end
 
-  def run_parser
+  def parse
     raise ArgumentError unless File.exist?(@file_to_parse)
     @options["-o"] ? parse_file_to_file : parse_file_to_stdout
   end
+
+  private
 
   def parse_file_to_stdout
     input_file = File.open(@file_to_parse, 'r')
@@ -34,9 +36,8 @@ class FileParser
         end
       end
     end
+    return true
   end
-
-  private
 
   def populate_options(params)
     @options["-l"] = 10
@@ -50,5 +51,4 @@ class FileParser
   end
 end
 
-parser = FileParser.new(*ARGV)
-parser.run_parser
+parser = FileParser.new(*ARGV).parse if ARGV.any?
