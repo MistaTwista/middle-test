@@ -55,21 +55,28 @@ class FileParser
   end
 
   def read_limited(input_file, object, from_line, length)
-    (from_line - 1).times { input_file.gets } # fast forward
+    # (from_line - 1).times { input_file.gets } # fast forward
     id = Thread.current.thread_variable_get(:id)
-    puts "#{id} starting real work"
-    1.tap do |counter|
-      while !input_file.eof?
-        break if counter > length
-        line_no = input_file.lineno
-        line = input_file.readline.to_i
-        if Prime.prime?(line)
-          object.print "#{line_no + 1};#{line}\n"
-        end
-        counter += 1
+    print "THREAD #{id} started real work\n"
+    counter = 1
+    input_file.each_line do |line|
+      line_no = input_file.lineno
+      next if line_no < from_line
+      break if counter > length
+      if Prime.prime?(line.to_i)
+        # print "ID(#{id}) Line##{input_file.lineno}\n"
+        object.print "#{line_no};#{line}"
       end
+      counter += 1
     end
     return true
+    # 1.tap do |counter|
+    #   while !input_file.eof?
+    #     line_no = input_file.lineno
+    #     line = input_file.readline.to_i
+    #   end
+    # end
+    # return true
   end
 
   def sort_output(file = @options["-o"])
@@ -127,4 +134,10 @@ class FileParser
   end
 end
 
+started_at = Time.now
+
 parser = FileParser.new(*ARGV).parse if ARGV.any?
+
+long = (Time.now - started_at).round(2)
+p "Created in #{long} seconds"
+# "Created in 79.43 seconds"
