@@ -13,8 +13,9 @@ class TestMissingNumber < Test::Unit::TestCase
   end
 
   def test_lucky
-    ticket = 253343
-    assert_equal(true, check_lucky_ticket(ticket))
+    [253343, 17935, 56328116].each do |ticket|
+      assert_equal(true, check_lucky_ticket(ticket))
+    end
   end
 
   def test_unlucky

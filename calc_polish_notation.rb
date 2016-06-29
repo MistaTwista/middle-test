@@ -1,24 +1,25 @@
-def calculation_sign(symbol)
-  available_sign_symbols = {
+module PolishNotation
+  AVAILABLE_SIGN_SYMBOLS = {
     '+': :+,
     '-': :-,
     '*': :*,
     '/': :/,
     '^': :**,
-  }
-  available_sign_symbols[symbol.to_sym]
+  }.freeze
+end
+
+def calculation_sign(symbol)
+  PolishNotation::AVAILABLE_SIGN_SYMBOLS[symbol.to_sym]
 end
 
 def bad_symbols?(exp)
   matcher = /[^ \+\-\*\/\^0-9]/.match(exp.join(' '))
   puts 'Bad symbols detected' unless matcher.nil?
-  matcher.nil?
+  !matcher.nil?
 end
 
 def valid_expression?(exp)
-  return false unless bad_symbols?(exp)
-  return true if exp.any?
-  false
+  !bad_symbols?(exp) && exp.any?
 end
 
 def prepare_expression(exp)

@@ -1,7 +1,7 @@
 def get_digits_array(num)
   n = num.abs
   [].tap do |result|
-    while n > 1
+    while n > 0
       n, digit = n.divmod 10
       result.unshift digit
     end
