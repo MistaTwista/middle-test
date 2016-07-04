@@ -5,14 +5,6 @@ class Node < Struct.new(:num, :childrens)
     end
   end
 
-  def id
-    num
-  end
-
-  def inspect
-    "num: #{num}, childrens: #{childrens}"
-  end
-
   def weight
     if childrens.any?
       result = 0
@@ -51,8 +43,9 @@ n3.add_childrens(n9)
 n10 = Node.new_empty(10)
 n9.add_childrens(n10)
 
-# p n1
-p n1.weight
-# tree = []
+n11 = Node.new_empty(11)
+n12 = Node.new_empty(12)
+n13 = Node.new_empty(13)
+n10.add_childrens(n11, n12, n13)
 
-# 55
+p n1.weight
